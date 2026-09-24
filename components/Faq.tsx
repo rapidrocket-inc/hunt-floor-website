@@ -132,6 +132,7 @@ export default function Faq() {
               <span className="footer__h">Product</span>
               <a href="#problem">Problem</a>
               <a href="#loop">How it works</a>
+              <a href="#coach">Intelligence</a>
               <a href="#proof">Proof</a>
               <a href="#access">Book a demo</a>
             </div>

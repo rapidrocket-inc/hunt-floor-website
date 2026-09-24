@@ -22,7 +22,7 @@ export default function Nav() {
         <nav className="nav__links" aria-label="Primary">
           <a href="#problem">Problem</a>
           <a href="#loop">How it works</a>
-          <a href="#sources">Platform</a>
+          <a href="#coach">Intelligence</a>
           <a href="#proof">Proof</a>
         </nav>
         <div className="nav__right">
@@ -48,8 +48,8 @@ export default function Nav() {
         <a href="#loop" onClick={() => setOpen(false)}>
           How it works
         </a>
-        <a href="#sources" onClick={() => setOpen(false)}>
-          Platform
+        <a href="#coach" onClick={() => setOpen(false)}>
+          Intelligence
         </a>
         <a href="#proof" onClick={() => setOpen(false)}>
           Proof
