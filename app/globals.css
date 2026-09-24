@@ -329,6 +329,14 @@
   transform: none;
   transition: opacity 0.7s cubic-bezier(0.2, 0.7, 0.2, 1), transform 0.7s cubic-bezier(0.2, 0.7, 0.2, 1);
 }
+/* Coach/Sources render this element's className via React AND toggle a `.play`
+   class; that re-render can clobber the reveal observer's imperatively-added
+   `.in`. `.play` only lands when the component is in view, so reveal it too. */
+.reveal.play,
+.reveal-up.play {
+  opacity: 1;
+  transform: none;
+}
 .hero .reveal[data-r="1"].in { transition-delay: 0.05s; }
 .hero .reveal[data-r="2"].in { transition-delay: 0.13s; }
 .hero .reveal[data-r="3"].in { transition-delay: 0.21s; }
@@ -2881,6 +2889,16 @@ input[type="range"]::-moz-range-thumb {
    property here or it would override the attribute and hide the blobs */
 .sflow__dot { fill: var(--accent-hi); filter: drop-shadow(0 0 5px rgba(var(--accent-rgb), 0.9)); }
 
+/* mobile-only vertical connector (Sources -> hub -> leads); hidden on desktop
+   where the SVG wires + blobs handle the flow instead */
+.sflow__mconn { display: none; }
+@keyframes sflowMDrop {
+  0% { transform: translateY(0); opacity: 0; }
+  15% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { transform: translateY(46px); opacity: 0; }
+}
+
 .sflow__col { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 11px; flex: 0 0 auto; }
 .sflow__leads { align-items: stretch; }
 .sflow__col-label {
@@ -3341,12 +3359,42 @@ input[type="range"]::-moz-range-thumb {
 .bookdemo__done .bookdemo__panel-d { margin: 8px auto 0; max-width: 34ch; }
 
 @media (max-width: 860px) {
-  .sflow { flex-direction: column; min-height: 0; gap: 22px; }
+  .sflow { flex-direction: column; align-items: center; min-height: 0; gap: 0; }
   .sflow__wires { display: none; }
-  .sflow__col { flex-direction: row; flex-wrap: wrap; justify-content: center; }
+  .sflow__col { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 8px; }
   .sflow__col-label { width: 100%; }
+  .sflow__sources, .sflow__leads { max-width: 340px; }
   .sflow__lead { min-width: 0; }
   .sources__cards { grid-template-columns: 1fr; }
+  /* vertical flow: line + dots streaming down between the stacked groups */
+  .sflow__mconn {
+    display: block;
+    position: relative;
+    width: 2px;
+    height: 46px;
+    margin: 16px 0;
+    border-radius: 2px;
+    background: linear-gradient(180deg, rgba(var(--accent-rgb), 0.5), rgba(var(--accent-rgb), 0.12));
+  }
+  .sflow__mconn::before,
+  .sflow__mconn::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 7px;
+    height: 7px;
+    margin-left: -3.5px;
+    border-radius: 50%;
+    background: var(--accent-hi);
+    box-shadow: 0 0 8px 1px rgba(var(--accent-rgb), 0.8);
+    animation: sflowMDrop 1.8s linear infinite;
+  }
+  .sflow__mconn::after { animation-delay: 0.9s; }
+}
+@media (max-width: 860px) and (prefers-reduced-motion: reduce) {
+  .sflow__mconn::before, .sflow__mconn::after { animation: none; top: 38%; opacity: 0.7; }
+  .sflow__mconn::after { display: none; }
 }
 
 @media (max-width: 900px) {

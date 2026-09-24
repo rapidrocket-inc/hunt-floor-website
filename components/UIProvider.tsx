@@ -31,7 +31,6 @@ export default function UIProvider({ children }: { children: React.ReactNode }) 
   const [muted, setMuted] = useState(true);
   const [soundTouched, setSoundTouched] = useState(false);
   const bellTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const autoFired = useRef(false);
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
@@ -61,32 +60,6 @@ export default function UIProvider({ children }: { children: React.ReactNode }) 
       videoRef.current.pause();
     }
   }, []);
-
-  // Auto-fire the Bell once at 60% scroll depth (rate-limited to once/session)
-  useEffect(() => {
-    const seen =
-      typeof sessionStorage !== "undefined" &&
-      sessionStorage.getItem("hf_bell_seen");
-    if (seen) {
-      autoFired.current = true;
-      return;
-    }
-    const onScroll = () => {
-      if (autoFired.current) return;
-      const scrolled =
-        window.scrollY + window.innerHeight;
-      const depth = document.body.scrollHeight * 0.6;
-      if (scrolled >= depth) {
-        autoFired.current = true;
-        try {
-          sessionStorage.setItem("hf_bell_seen", "1");
-        } catch {}
-        ringBell();
-      }
-    };
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [ringBell]);
 
   // Global reveal-on-scroll observer for .reveal / .reveal-up
   useEffect(() => {

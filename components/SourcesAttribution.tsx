@@ -351,12 +351,16 @@ export default function SourcesAttribution() {
           ))}
         </div>
 
+        <span className="sflow__mconn" aria-hidden="true" />
+
         <div className="sflow__hub" ref={hubRef}>
           <div className="sflow__hub-brand">
             HUNT<span>FLOOR</span>
           </div>
           <div className="sflow__hub-sub">priced &middot; matched &middot; picked up</div>
         </div>
+
+        <span className="sflow__mconn" aria-hidden="true" />
 
         <div className="sflow__col sflow__leads">
           <span className="sflow__col-label">Closed leads</span>
